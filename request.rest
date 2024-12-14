@@ -19,3 +19,16 @@ GET http://localhost:3000/post?sender=12335
 ###
 # Get Post by ID
 GET http://localhost:3000/post/674205c28c1b9b208115cc74
+
+###
+# Update Post
+PUT http://localhost:3000/post/674205c28c1b9b208115cc74
+Content-Type: application/json
+
+{
+  "content": "Updated Post content",
+  "senderId": "UpdatedSender123"
+}
+
+
+
