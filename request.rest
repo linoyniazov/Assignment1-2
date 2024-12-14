@@ -1,3 +1,13 @@
 ###
+#add post
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+  "content": "This is the content of the sample post.",
+  "senderId": "12335"
+}
+
+###
 # Get All Posts
 GET http://localhost:3000/post
