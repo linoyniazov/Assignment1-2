@@ -53,3 +53,13 @@ GET http://localhost:3000/comments
 
 #get comments by postId
 GET http://localhost:3000/comments?postId=1234567890abcdef12345678
+
+###
+
+#update a comment
+PUT http://localhost:3000/comments/675d764a6f64f2f7349612e5
+Content-Type: application/json
+
+{
+  "content": "Updated comment content"
+}

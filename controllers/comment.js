@@ -29,10 +29,23 @@ const getComments = async (req, res) => {
     }
 };
 
+const updateComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const comment = await Comment.findByIdAndUpdate(id, req.body, { new: true });
+        if (!comment) return res.status(404).send("Comment not found");
+        res.status(200).json(comment);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
 
 
 module.exports = {
     createComment,
     getComments,
+    updateComment,
 
 }
