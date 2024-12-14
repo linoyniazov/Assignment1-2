@@ -71,11 +71,44 @@ const getPostById = async (req, res) => {
     }
 };
 
+/**
+ * Update a post by ID
+ */
+const updatePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ message: 'Post ID is required' });
+        }
+
+        if (!content) {
+            return res.status(400).json({ message: 'Field content is required' });
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            id,
+            { content },
+            { new: true } // Return updated document
+        );
+
+        if (!updatedPost) {
+            return res.status(404).json({ message: 'Post not found for update' });
+        }
+
+        res.status(200).json(updatedPost);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
 
 module.exports = {
    
     getAllPosts,
     addPost,
     getPostById,
+    updatePost,
    
 };
