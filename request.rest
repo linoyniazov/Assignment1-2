@@ -43,3 +43,13 @@ Content-Type: application/json
   "content": "This is a new comment.",
   "senderId": "User12345"
 }
+
+###
+#get all comments
+
+GET http://localhost:3000/comments
+
+###
+
+#get comments by postId
+GET http://localhost:3000/comments?postId=1234567890abcdef12345678

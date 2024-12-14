@@ -14,8 +14,25 @@ const createComment = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+// Get comments, filter by postId if provided
+const getComments = async (req, res) => {
+    try {
+        const { postId } = req.query;
+
+        // If postId is provided, filter by it; otherwise, return all comments
+        const filter = postId ? { postId } : {};
+        const comments = await Comment.find(filter);
+
+        res.status(200).json(comments);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 
 module.exports = {
     createComment,
+    getComments,
 
 }
