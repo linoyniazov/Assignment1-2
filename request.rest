@@ -11,3 +11,11 @@ Content-Type: application/json
 ###
 # Get All Posts
 GET http://localhost:3000/post
+
+###
+#Get Posts by Sender
+GET http://localhost:3000/post?sender=12335
+
+###
+# Get Post by ID
+GET http://localhost:3000/post/674205c28c1b9b208115cc74
