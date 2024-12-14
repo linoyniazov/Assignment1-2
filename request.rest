@@ -32,3 +32,14 @@ Content-Type: application/json
 
 
 
+###
+
+#create a comment
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+  "postId": "1234567890abcdef12345678",
+  "content": "This is a new comment.",
+  "senderId": "User12345"
+}
