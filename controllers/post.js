@@ -1,6 +1,30 @@
 const Post = require('../models/post');
 
 /**
+ * Add a new post
+ */
+const addPost = async (req, res) => {
+    try {
+        const { content, senderId } = req.body;
+
+        if (!content || !senderId) {
+            return res.status(400).json({ message: 'Fields content and senderId are required' });
+        }
+
+        const newPost = new Post({
+            content,
+            senderId,
+        });
+
+        await newPost.save();
+        res.status(201).json(newPost);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
+/**
  * Get all posts or posts by sender
  */
 const getAllPosts = async (req, res) => {
@@ -28,5 +52,6 @@ const getAllPosts = async (req, res) => {
 module.exports = {
    
     getAllPosts,
+    addPost,
    
 };
