@@ -63,3 +63,8 @@ Content-Type: application/json
 {
   "content": "Updated comment content"
 }
+
+###
+
+#delet a comment
+DELETE http://localhost:3000/comments/674218a105d1b068c8cd4d5e

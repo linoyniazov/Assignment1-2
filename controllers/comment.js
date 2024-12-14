@@ -40,6 +40,16 @@ const updateComment = async (req, res) => {
     }
 };
 
+const deleteComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const comment = await Comment.findByIdAndDelete(id);
+        if (!comment) return res.status(404).send("Comment not found");
+        res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 
 
@@ -47,5 +57,6 @@ module.exports = {
     createComment,
     getComments,
     updateComment,
+    deleteComment,
 
 }
