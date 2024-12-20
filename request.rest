@@ -67,4 +67,4 @@ Content-Type: application/json
 ###
 
 #delet a comment
-DELETE http://localhost:3000/comments/674218a105d1b068c8cd4d5e
+DELETE http://localhost:3000/comments/675d764a6f64f2f7349612e5
