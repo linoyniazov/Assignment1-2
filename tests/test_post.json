@@ -1,0 +1,10 @@
+[
+    {
+      "content":"This is a test post",
+      "senderId": "123456"
+    },
+    {
+      "content": "This is another test post",
+      "senderId": "654321"
+    }
+  ]
