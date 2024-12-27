@@ -1,7 +1,8 @@
-const Comment = require("../models/comment");
+import Comment from "../models/comment";
+import { Request, Response } from "express";
 
 // Create a new comment
-const createComment = async (req, res) => {
+const createComment = async (req:Request, res:Response) => {
     try {
         const { postId, content, senderId } = req.body;
         if (!postId || !content || !senderId) {
@@ -15,7 +16,7 @@ const createComment = async (req, res) => {
     }
 };
 // Get comments, filter by postId if provided
-const getComments = async (req, res) => {
+const getComments = async (req:Request, res:Response) => {
     try {
         const { postId } = req.query;
 
@@ -29,7 +30,7 @@ const getComments = async (req, res) => {
     }
 };
 
-const updateComment = async (req, res) => {
+const updateComment = async (req:Request, res:Response) => {
     try {
         const { id } = req.params;
         const comment = await Comment.findByIdAndUpdate(id, req.body, { new: true });
@@ -41,7 +42,7 @@ const updateComment = async (req, res) => {
     }
 };
 
-const deleteComment = async (req, res) => {
+const deleteComment = async (req:Request, res:Response) => {
     try {
         const { id } = req.params;
         const comment = await Comment.findByIdAndDelete(id);
@@ -52,12 +53,10 @@ const deleteComment = async (req, res) => {
     }
 };
 
-
-
-module.exports = {
+export default {
     createComment,
     getComments,
     updateComment,
     deleteComment,
+};
 
-}
