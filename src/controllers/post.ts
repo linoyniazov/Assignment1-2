@@ -1,9 +1,9 @@
-const Post = require('../models/post');
-
+import Post from '../models/post';
+import { Request, Response } from 'express';
 /**
  * Add a new post
  */
-const addPost = async (req, res) => {
+const addPost = async (req:Request, res:Response) => {
     try {
         const { content, senderId } = req.body;
 
@@ -19,7 +19,8 @@ const addPost = async (req, res) => {
         await newPost.save();
         res.status(201).json(newPost);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
+        
     }
 };
 
@@ -27,7 +28,7 @@ const addPost = async (req, res) => {
 /**
  * Get all posts or posts by sender
  */
-const getAllPosts = async (req, res) => {
+const getAllPosts = async (req:Request, res:Response) => {
     try {
         const { sender } = req.query;
 
@@ -44,34 +45,14 @@ const getAllPosts = async (req, res) => {
 
         res.status(200).json(posts);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
     }
 };
 
 /**
  * Get a post by ID
  */
-// const getPostById = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-
-//         if (!id) {
-//             return res.status(400).json({ message: 'Post ID is required' });
-//         }
-
-//         const post = await Post.findById(id);
-
-//         if (!post) {
-//             return res.status(404).json({ message: 'Post not found' });
-//         }
-
-//         res.status(200).json(post);
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// };
-
-const getPostById = async (req, res) => {
+const getPostById = async (req:Request, res:Response) => {
     try {
         const { id } = req.params;
 
@@ -83,14 +64,14 @@ const getPostById = async (req, res) => {
 
         res.status(200).json(post);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
     }
 };
 
 /**
  * Update a post by ID
  */
-const updatePost = async (req, res) => {
+const updatePost = async (req:Request, res:Response) => {
     try {
         const { id } = req.params;
         const { content } = req.body;
@@ -115,16 +96,14 @@ const updatePost = async (req, res) => {
 
         res.status(200).json(updatedPost);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
     }
 };
 
 
-module.exports = {
-   
+export default {
     getAllPosts,
     addPost,
     getPostById,
     updatePost,
-   
 };

@@ -1,11 +1,21 @@
-const request = require("supertest");
-const appInit = require("../server");
-const mongoose = require("mongoose");
-const commentModel = require("../models/comment");
+import request from "supertest";
+import appInit from "../server";
+import mongoose from "mongoose";
+import commentModel from "../models/comment";
+import { Express } from "express";
+import testCommentData from "./test_comment.json";
 
-const testComment = require("./test_comment");
+let app: Express;
 
-let app;
+type Comment = {
+  _id?: string;
+  content: string;
+  senderId: string;
+  postId: string;
+};
+
+const testComment: Comment[] = testCommentData;
+
 beforeAll(async () => {
   console.log("beforeAll");
   app = await appInit();
@@ -23,7 +33,7 @@ describe("comments Test", () => {
     expect(response.body.length).toBe(0);
   });
   test("Test create new comment", async () => {
-    for (let comment of testComment) {
+    for (const comment of testComment) {
       const response = await request(app).post("/comments").send(comment);
       expect(response.statusCode).toBe(201);
       expect(response.body.content).toBe(comment.content);

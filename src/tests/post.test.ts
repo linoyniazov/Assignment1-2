@@ -1,11 +1,21 @@
-const request = require("supertest");
-const appInit = require("../server");
-const mongoose = require("mongoose");
-const postModel = require("../models/post");
+import request from "supertest";
+import appInit from "../server";
+import mongoose from "mongoose";
+import postModel from "../models/post";
 
-const testPost = require("./test_post");
+import testPostData from "./test_post.json";
+import { Express } from "express";
 
-let app;
+let app: Express;
+
+type Post = {
+  _id?: string;
+  content: string;
+  senderId: string;
+}
+
+const testPost: Post[] = testPostData;
+
 beforeAll(async () => {
   console.log("beforeAll");
     app = await appInit(); 
@@ -24,9 +34,18 @@ describe("posts Test", () => {
     expect(response.body.message).toBe("No posts found");
     // expect(response.body.length).toBe(0);
   });
+  // test("Test create new post", async () => {
+  //   for (let post of testPost) {
+  //     const response = await request(app).post("/post").send(post);
+  //     expect(response.statusCode).toBe(201);
+  //     expect(response.body.content).toBe(post.content);
+  //     expect(response.body.senderId).toBe(post.senderId);
+  //     post._id = response.body._id;
+  //   }
+  // });
   test("Test create new post", async () => {
-    for (let post of testPost) {
-      const response = await request(app).post("/post").send(post);
+    for (const post of testPost) {
+      const response = await request(app).post("/posts").send(post);
       expect(response.statusCode).toBe(201);
       expect(response.body.content).toBe(post.content);
       expect(response.body.senderId).toBe(post.senderId);

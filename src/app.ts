@@ -1,4 +1,4 @@
-const appInit = require("./server");
+import appInit from "./server";
 const port = process.env.PORT;
 
 const tmpFunc = async () => {
