@@ -45,7 +45,7 @@ describe("posts Test", () => {
   // });
   test("Test create new post", async () => {
     for (const post of testPost) {
-      const response = await request(app).post("/posts").send(post);
+      const response = await request(app).post("/post").send(post);
       expect(response.statusCode).toBe(201);
       expect(response.body.content).toBe(post.content);
       expect(response.body.senderId).toBe(post.senderId);

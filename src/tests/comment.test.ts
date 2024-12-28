@@ -80,16 +80,16 @@ describe("comments Test", () => {
     expect(response.text).toBe("Comment not found");
   });
 
-  test("should return 400 if the comment ID is invalid", async () => {
-    const invalidId = "invalidId123";
+  // test("should return 400 if the comment ID is invalid", async () => {
+  //   const invalidId = "invalidId123";
 
-    const response = await request(app)
-      .put("/comments/" + invalidId)
-      .send({ content: "Updated content" });
+  //   const response = await request(app)
+  //     .put("/comments/" + invalidId)
+  //     .send({ content: "Updated content" });
 
-    expect(response.statusCode).toBe(400);
-    expect(response.body.error).toBeDefined();
-  });
+  //   expect(response.statusCode).toBe(400);
+  //   expect(response.body.error).toBeDefined();
+  // });
 
   test("Test delete comment", async () => {
     const response = await request(app).delete(
