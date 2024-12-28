@@ -1,17 +1,17 @@
 [
   {
       "comment": "This is a comment",
-      "owner": "Michal",
+      "owner": "Linoy",
       "postId": "safgsefdgsdfgsd"
   },
   {
       "comment": "This is another comment",
-      "owner": "Michal",
+      "owner": "Almog",
       "postId": "safgsefdgsdfgsd"
   },
   {
       "comment": "This is another comment",
-      "owner": "Michal2",
+      "owner": "Linoy&Almog",
       "postId": "safgsefdgsdfgsd"
   }
 ]

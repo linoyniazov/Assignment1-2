@@ -6,114 +6,108 @@ import postModel from "../models/post";
 import testPostData from "./test_post.json";
 import { Express } from "express";
 
-let app: Express;
+import userModel, { IUser } from "../models/user";
 
-type Post = {
-  _id?: string;
-  content: string;
-  senderId: string;
-}
+var app: Express;
+type User = IUser & { token?: string };
 
-const testPost: Post[] = testPostData;
+const testUser: User = {
+  email: "test@user.com",
+  password: "password123",
+};
 
 beforeAll(async () => {
   console.log("beforeAll");
-    app = await appInit(); 
+  app = await appInit();
   await postModel.deleteMany();
+
+  await userModel.deleteMany();
+  await request(app).post("/auth/register").send(testUser);
+  const response = await request(app).post("/auth/login").send(testUser);
+  testUser.token = response.body.token;
+  testUser._id = response.body._id;
+  expect(testUser.token).toBeDefined();
 });
 
-afterAll(() => {
+afterAll((done) => {
   console.log("afterAll");
   mongoose.connection.close();
+  done();
 });
 
-describe("posts Test", () => {
-  test("Test gel all post empty", async () => {
-    const response = await request(app).get("/post");
-    expect(response.statusCode).toBe(404);
-    expect(response.body.message).toBe("No posts found");
-    // expect(response.body.length).toBe(0);
-  });
-  // test("Test create new post", async () => {
-  //   for (let post of testPost) {
-  //     const response = await request(app).post("/post").send(post);
-  //     expect(response.statusCode).toBe(201);
-  //     expect(response.body.content).toBe(post.content);
-  //     expect(response.body.senderId).toBe(post.senderId);
-  //     post._id = response.body._id;
-  //   }
-  // });
-  test("Test create new post", async () => {
-    for (const post of testPost) {
-      const response = await request(app).post("/post").send(post);
-      expect(response.statusCode).toBe(201);
-      expect(response.body.content).toBe(post.content);
-      expect(response.body.senderId).toBe(post.senderId);
-      post._id = response.body._id;
-    }
-  });
-  test("Test get all posts", async () => {
-    const response = await request(app).get("/post");
+let postId = "";
+
+describe("Posts Tests", () => {
+  test("Posts test get all", async () => {
+    const response = await request(app).get("/post/getposts");
     expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(testPost.length);
+    expect(response.body.length).toBe(0);
   });
-  test("Test get post by id", async () => {
-    const response = await request(app).get("/post/" + testPost[0]._id);
-    expect(response.statusCode).toBe(200);
-    expect(response.body._id).toBe(testPost[0]._id);
+  test("Test Create post", async () => {
+    const response = await request(app)
+      .post("/post")
+      .set({ authorization: "JWT " + testUser.token })
+      .send(testPostData[0]);
+    expect(response.statusCode).toBe(201);
+    expect(response.body.title).toBe(testPostData[0].title);
+    expect(response.body.content).toBe(testPostData[0].content);
+    postId = response.body._id;
   });
-  test("Test get post by sender", async () => {
-    const response = await request(app).get(
-      "/post?sender=" + testPost[0].senderId
-    );
+
+  test("Test Create post 2", async () => {
+    const response = await request(app)
+      .post("/post")
+      .set({ authorization: "JWT " + testUser.token })
+      .send(testPostData[1]);
+    expect(response.statusCode).toBe(201);
+    expect(response.body.title).toBe(testPostData[1].title);
+    expect(response.body.content).toBe(testPostData[1].content);
+    postId = response.body._id;
+  });
+
+  test("Test get post by owner", async () => {
+    const response = await request(app)
+      .get("/post?owner=" + testUser._id)
+      .set({ authorization: "JWT " + testUser.token });
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
+    expect(response.body[0].title).toBe(testPostData[0].title);
+    expect(response.body[0].content).toBe(testPostData[0].content);
   });
 
-  test("Test update post", async () => {
-    const response = await request(app)
-      .put("/post/" + testPost[0]._id)
-      .send({ content: "Updated content" });
+  test("Test get post by id", async () => {
+    const response = await request(app).get("/post/" + postId);
     expect(response.statusCode).toBe(200);
-    expect(response.body.content).toBe("Updated content");
+    expect(response.body.content).toBe(testPostData[1].content);
+    expect(response.body.title).toBe(testPostData[1].title);
   });
 
-
-test("should return 404 when post ID does not exist", async () => {
-    const nonExistentId = "641c8a4d0f0f1c3c12345678"; // ID תקין אבל לא קיים
-
-    const response = await request(app)
-        .put("/post/"+nonExistentId)
-        .send({ content: "Updated content" });
-
-    expect(response.statusCode).toBe(404);
-    expect(response.body.message).toBe("Post not found for update");
-});
-
-
-test("should return 400 when content is missing", async () => {
-    const response = await request(app)
-        .put("/post/"+testPost[0]._id)
-        .send({});
-
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe("Field content is required");
-});
-
-
-  test("Test create new post fail", async () => {
-    const response = await request(app).post("/post").send({
-      content: "This is a test post",
-    });
-    expect(response.statusCode).toBe(400);
+  test("Posts test get all 2", async () => {
+    const response = await request(app).get("/post");
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0].title).toBe(testPostData[0].title);
+    expect(response.body[1].title).toBe(testPostData[1].title); 
   });
-  //   test("Test get post by id fail - invalid ID format", async () => {
-  //     const response = await request(app).get("/post/invalidId");
-  //     expect(response.statusCode).toBe(400);
-  //     expect(response.body.message).toBe("Invalid post ID");
-  //   });
-  test("Fail to get post by non-existing ID", async () => {
-    const response = await request(app).get("/post/675d74c7e039287983e32a15");
-    expect(response.statusCode).toBe(404);
+
+  test("Test Delete post", async () => {
+    const response = await request(app)
+      .delete("/post/" + postId)
+      .set({ authorization: "JWT " + testUser.token });
+    expect(response.statusCode).toBe(200);
+
+    const response2 = await request(app).get("/post/" + postId);
+    // .set({ authorization: "JWT " + testUser.token });
+    expect(response2.statusCode).toBe(404);
+  });
+
+  test("Test Create Post fail", async () => {
+    const response = await request(app)
+      .post("/post")
+      .set({ authorization: "JWT " + testUser.token })
+      .send({
+        content: "Test Content 2",
+      });
+    expect(response.statusCode).toBe(400); // Assuming the creation fails due to missing title or other validation
   });
 });

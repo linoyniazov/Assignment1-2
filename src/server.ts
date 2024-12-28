@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import postRoutes from "./routes/post";
 import commentRouter from "./routes/comment";
+import authRouter from "./routes/auth";
+
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -20,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/post", postRoutes);
 
 app.use("/comments", commentRouter);
+app.use("/auth", authRouter);
 
 // app.listen(port, () => {
 //   console.log(Example app listening at http://localhost:${port});

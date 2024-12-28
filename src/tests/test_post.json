@@ -1,10 +1,10 @@
 [
     {
-      "content":"This is a test post",
-      "senderId": "123456"
+        "title":"Test post",
+        "content":"Test content"
     },
     {
-      "content": "This is another test post",
-      "senderId": "654321"
+        "title":"Test post 2",
+        "content":"Test content 2"
     }
   ]
