@@ -1,13 +1,10 @@
-import initApp from "./server";
+import appInit from "./server";
 const port = process.env.PORT;
 
-initApp()
-.then((app) => {
+const tmpFunc = async () => {
+  const app = await appInit();
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
   });
-})
-
-  .catch(() => {
-    console.log("Error failed to start the server");
-  });
+};
+tmpFunc();

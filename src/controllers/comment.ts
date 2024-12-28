@@ -12,7 +12,7 @@ const createComment = async (req:Request, res:Response) => {
         const newComment = await Comment.create({ postId, content, senderId });
         res.status(201).json(newComment);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).send(error);
     }
 };
 // Get comments, filter by postId if provided
@@ -26,7 +26,7 @@ const getComments = async (req:Request, res:Response) => {
 
         res.status(200).json(comments);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).send(error);
     }
 };
 
@@ -37,7 +37,7 @@ const updateComment = async (req:Request, res:Response) => {
         if (!comment) return res.status(404).send("Comment not found");
         res.status(200).json(comment);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).send(error);
 
     }
 };
@@ -49,7 +49,7 @@ const deleteComment = async (req:Request, res:Response) => {
         if (!comment) return res.status(404).send("Comment not found");
         res.status(200).json({ message: "Comment deleted successfully" });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).send(error);
     }
 };
 

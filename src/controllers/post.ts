@@ -19,7 +19,8 @@ const addPost = async (req:Request, res:Response) => {
         await newPost.save();
         res.status(201).json(newPost);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
+        
     }
 };
 
@@ -44,7 +45,7 @@ const getAllPosts = async (req:Request, res:Response) => {
 
         res.status(200).json(posts);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
     }
 };
 
@@ -63,7 +64,7 @@ const getPostById = async (req:Request, res:Response) => {
 
         res.status(200).json(post);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
     }
 };
 
@@ -95,7 +96,7 @@ const updatePost = async (req:Request, res:Response) => {
 
         res.status(200).json(updatedPost);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).send(err);
     }
 };
 

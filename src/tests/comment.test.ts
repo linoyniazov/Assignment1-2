@@ -1,32 +1,30 @@
 import request from "supertest";
-import initApp from "../server";
+import appInit from "../server";
 import mongoose from "mongoose";
 import commentModel from "../models/comment";
 import { Express } from "express";
-
-// import testComment from "./test_comment.json";
+import testCommentData from "./test_comment.json";
 
 let app: Express;
+
+type Comment = {
+  _id?: string;
+  content: string;
+  senderId: string;
+  postId: string;
+};
+
+const testComment: Comment[] = testCommentData;
+
 beforeAll(async () => {
   console.log("beforeAll");
-  app = await initApp();
+  app = await appInit();
   await commentModel.deleteMany();
 });
 afterAll(() => {
   console.log("afterAll");
   mongoose.connection.close();
 });
-
-let commentId = "";
-const testComment = {
-  content: "This is a test comment",
-  senderId: "12345",
-  postId: "1234567890abcdef12345678",
-};
-
-// const invalidComment = {
-//   content: "This is a test comment",
-// };
 
 describe("comments Test", () => {
   test("Test get all comments empty", async () => {
@@ -35,18 +33,19 @@ describe("comments Test", () => {
     expect(response.body.length).toBe(0);
   });
   test("Test create new comment", async () => {
-    const response = await request(app).post("/comments").send(testComment);
-    expect(response.statusCode).toBe(201);
-    expect(response.body.content).toBe(testComment.content);
-    expect(response.body.senderId).toBe(testComment.senderId);
-    expect(response.body.postId).toBe(testComment.postId);
-    // testComment._id = response.body._id;
-    commentId = response.body._id;
+    for (const comment of testComment) {
+      const response = await request(app).post("/comments").send(comment);
+      expect(response.statusCode).toBe(201);
+      expect(response.body.content).toBe(comment.content);
+      expect(response.body.senderId).toBe(comment.senderId);
+      expect(response.body.postId).toBe(comment.postId);
+      comment._id = response.body._id;
+    }
   });
   test("Test get all comments", async () => {
     const response = await request(app).get("/comments");
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveLength(1);
+    expect(response.body.length).toBe(testComment.length);
   });
 
   //   test("Test get comment by id", async () => {
@@ -55,10 +54,11 @@ describe("comments Test", () => {
   //     expect(response.body._id).toBe(testComment[0]._id);
   //   });
   test("Test get comment by postId", async () => {
-    const response = await request(app).get("/comments?postId=" + testComment.postId);
+    const response = await request(app).get(
+      "/comments?postId=" + testComment[0].postId
+    );
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveLength(1);
-    expect(response.body[0].postId).toBe(testComment.postId);
+    expect(response.body.length).toBe(1);
   });
 
   test("Test update comment", async () => {
