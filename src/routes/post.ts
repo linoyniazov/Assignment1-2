@@ -1,17 +1,15 @@
-
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import postController from '../controllers/post';
+import postController from "../controllers/post";
 
-router.post('/', postController.addPost); // Add a new post
-router.get('/', postController.getAllPosts); // Get all posts or by sender
+router.post('/', postController.create.bind(postController));
 
-// router.get('/:id', postController.getPostById); // Get a post by ID
+router.get('/getposts', postController.getAll.bind(postController));
 
-router.get("/:id", (req, res) => {
-    postController.getPostById(req, res);
-});
+router.get('/:id',postController.getById.bind(postController));
 
-router.put('/:id', postController.updatePost); // Update a post by ID
+router.get('/', postController.getAll.bind(postController)); //get by sender
+
+router.put('/:id', postController.update.bind(postController));
 
 export default router;
