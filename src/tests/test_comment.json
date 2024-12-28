@@ -1,12 +1,17 @@
 [
-    {
-      "content": "This is a test comment",
-      "senderId": "123456",
-      "postId": "1234567890abcdef12345678"
-    },
-    {
-      "content": "This is another test comment",
-      "senderId": "654321",
-      "postId": "1234567890abcdef12345679"
-    }
-  ]
+  {
+      "comment": "This is a comment",
+      "owner": "Michal",
+      "postId": "safgsefdgsdfgsd"
+  },
+  {
+      "comment": "This is another comment",
+      "owner": "Michal",
+      "postId": "safgsefdgsdfgsd"
+  },
+  {
+      "comment": "This is another comment",
+      "owner": "Michal2",
+      "postId": "safgsefdgsdfgsd"
+  }
+]
